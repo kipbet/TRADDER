@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication</title>
+    <link rel="stylesheet" href="styless.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script>
+        // Firebase Configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDUYnN3bOTPNHvKHdWwrlACOAnLCAgxiJI",
+            authDomain: "manuu-59b30.firebaseapp.com",
+            projectId: "manuu-59b30",
+            storageBucket: "manuu-59b30.appspot.com",
+            messagingSenderId: "872309397811",
+            appId: "1:872309397811:web:86430ccca5022f63954646",
+            measurementId: "G-CBC53KCBW7"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ecf0f1;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-container button {
+            background: #16a085;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background: #1abc9c;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Sign Up</h2>
+        <input type="email" id="signup-email" placeholder="Email">
+        <input type="password" id="signup-password" placeholder="Password">
+        <select id="signup-role">
+            <option value="client">Client</option>
+            <option value="farmer">Farmer</option>
+        </select>
+        <button onclick="signUp()">Sign Up</button>
+        <p>Already have an account? <a href="login1.html">Login</a></p>
+    </div>
+    
+    <script>
+        function signUp() {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const role = document.getElementById('signup-role').value;
+
+            auth.createUserWithEmailAndPassword(email, password).then(userCredential => {
+                return db.collection('users').doc(userCredential.user.uid).set({
+                    email: email,
+                    role: role
+                });
+            }).then(() => {
+                alert('Signup successful!');
+                window.location.href = 'login1.html';
+            }).catch(error => {
+                alert(error.message);
+            });
+        }
+    </script>
+</body>
+</html>
